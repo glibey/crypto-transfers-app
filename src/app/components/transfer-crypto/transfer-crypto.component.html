@@ -1,0 +1,115 @@
+<form [formGroup]="sendForm">
+  <div class="card p-3">
+    <h3>Transfer crypto to:</h3>
+    <div class="row my-3">
+      <div class="col-4">
+        <label for="recipient" class="form-label">Recipient address:</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="0xf4b10f8D6F265..."
+          formControlName="recipient"
+          [ngClass]="{
+            'is-invalid':
+              (sendForm.get('recipient')?.touched ||
+                sendForm.get('recipient')?.dirty) &&
+              sendForm.get('recipient')?.invalid,
+            'is-valid':
+              (sendForm.get('recipient')?.touched ||
+                sendForm.get('recipient')?.dirty) &&
+              sendForm.get('recipient')?.valid
+          }"
+          id="recipient"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            sendForm.get('recipient')?.errors &&
+            (sendForm.get('recipient')?.dirty ||
+              sendForm.get('recipient')?.touched)
+          "
+        >
+          <div [hidden]="!sendForm.get('recipient')?.errors?.['required']">
+            <ng-template [ngTemplateOutlet]="requiredField"></ng-template>
+          </div>
+          <div
+            [hidden]="!sendForm.get('recipient')?.errors?.['invalidAddress']"
+          >
+            Please provide correct recipient address!
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col-4">
+        <label for="amount" class="form-label">Amount:</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="0.2"
+          formControlName="amount"
+          [ngClass]="{
+            'is-invalid':
+              (sendForm.get('amount')?.touched ||
+                sendForm.get('amount')?.dirty) &&
+              sendForm.get('amount')?.invalid,
+            'is-valid':
+              (sendForm.get('amount')?.touched ||
+                sendForm.get('amount')?.dirty) &&
+              sendForm.get('amount')?.valid
+          }"
+          id="amount"
+        />
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            sendForm.get('amount')?.errors &&
+            (sendForm.get('amount')?.dirty || sendForm.get('amount')?.touched)
+          "
+        >
+          <div [hidden]="!sendForm.get('amount')?.errors?.['required']">
+            <ng-template [ngTemplateOutlet]="requiredField"></ng-template>
+          </div>
+          <div [hidden]="!sendForm.get('amount')?.errors?.['invalidBalance']">
+            Your balance is empty!
+          </div>
+          <div [hidden]="!sendForm.get('amount')?.errors?.['invalidAmount']">
+            Amount should be between 0.000000000000000001 and
+            {{ balance$ | async }} ETH!
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row my-3">
+      <div class="col">
+        <button
+          [disabled]="sendForm.invalid"
+          class="btn btn-outline-primary"
+          (click)="openConfirmationModal(modalConfirmation)"
+        >
+          Send
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<ng-template #modalConfirmation>
+  <div class="modal-body text-center">
+    <p>Do you want to confirm?</p>
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="confirm(sendForm)"
+    >
+      Yes
+    </button>
+    <button type="button" class="btn btn-default" (click)="decline()">
+      No
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #requiredField>
+  <p>This field is required!</p>
+</ng-template>

@@ -30,9 +30,22 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/bootstrap/scss/bootstrap.scss",
+              "./node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              "./node_modules/ngx-toastr/toastr.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "bn.js",
+              "aes-js",
+              "scrypt-js",
+              "js-sha3",
+              "bech32",
+              "hash.js"
+            ]
           },
           "configurations": {
             "production": {
